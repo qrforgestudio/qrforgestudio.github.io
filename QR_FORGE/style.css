@@ -1,0 +1,27 @@
+
+*{box-sizing:border-box}
+:root{--bg:#070b14;--panel:#111a2c;--panel2:#0b1322;--line:#2b3a57;--text:#eef4ff;--muted:#93a2bd;--a:#7c3aed;--b:#06b6d4}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#1b2948 0,#070b14 50%);color:var(--text);font-family:Arial,sans-serif}
+.container{max-width:1180px;margin:auto;padding:24px}
+header{text-align:center;padding:10px 0 25px}
+h1{font-size:42px;margin:5px;background:linear-gradient(90deg,#a78bfa,#22d3ee);color:transparent;background-clip:text}
+h2{margin-top:0}.muted,.hint{color:var(--muted)}
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.nav a,.btn{display:inline-block;padding:11px 15px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:#fff;text-decoration:none;font-weight:700;cursor:pointer}
+.nav a:hover,.btn:hover{border-color:#7185a9}.primary{border:0!important;background:linear-gradient(90deg,var(--a),var(--b))!important}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:rgba(17,26,44,.97);border:1px solid var(--line);border-radius:18px;padding:22px}
+label{display:block;font-weight:700;margin:13px 0 7px}
+input,select,textarea{width:100%;padding:11px;border-radius:9px;border:1px solid #354663;background:var(--panel2);color:#fff}
+input[type=color]{height:42px;padding:3px}textarea{min-height:110px;resize:vertical}
+.preview{min-height:430px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+.preview img,.preview canvas{max-width:100%;max-height:520px}
+.home{padding:35px;background:rgba(17,26,44,.97);border:1px solid var(--line);border-radius:22px;text-align:center}
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:24px}
+.tool{padding:22px;background:#10192b;border:1px solid var(--line);border-radius:16px;text-align:left}
+.tool h3{margin:8px 0}.tool p{color:var(--muted);font-size:13px;line-height:1.55}
+.ad{height:90px;border:1px dashed #34435e;border-radius:14px;margin-top:18px;display:flex;align-items:center;justify-content:center;color:#596884;font-size:11px;letter-spacing:2px}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+#qrcode{background:#fff;padding:15px;border-radius:12px}
+.status{padding:10px;border-radius:10px;background:#0b1425;border:1px solid var(--line);margin:12px 0}
+@media(max-width:800px){.grid,.tools{grid-template-columns:1fr}h1{font-size:32px}}
