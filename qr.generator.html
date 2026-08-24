@@ -2,15 +2,13 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Free QR Code Generator Online - QR Forge Studio</title>
 
     <meta name="description"
-        content="Create free QR codes online with QR Forge Studio. Generate QR codes for URLs, text, Wi-Fi, vCards, email, SMS, phone, GPS, WhatsApp, UPI, Bitcoin and more. Customize colors and size, then download as PNG.">
+        content="Create free QR codes online for URLs, text, Wi-Fi, vCards, email, SMS, phone, GPS, WhatsApp, UPI, Bitcoin and more.">
 
     <meta name="robots" content="index, follow">
 
@@ -20,80 +18,71 @@
     <link rel="stylesheet" href="style.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 </head>
-
 
 <body>
 
-
 <div class="container">
 
-
     <!-- NAVIGATION -->
-
     <nav class="nav">
-
-        <a href="index.html">
-            🏠 Home
-        </a>
-
-        <a href="resize.html">
-            Resize
-        </a>
-
-        <a href="c.html">
-            Compress
-        </a>
-
+        <a href="index.html">🏠 Home</a>
+        <a href="resize.html">Resize</a>
+        <a href="c.html">Compress</a>
     </nav>
 
-
-
-    <!-- PAGE INTRO -->
-
+    <!-- HEADER -->
     <header>
-
         <h1>Free QR Code Generator</h1>
 
         <p class="muted">
-            Create free QR codes online for text, URLs, Wi-Fi,
-            contacts, email, SMS, phone numbers, locations,
-            WhatsApp, UPI, Bitcoin and more.
+            Create free QR codes for text, URLs, Wi-Fi, contacts,
+            email, SMS, phone numbers, locations, WhatsApp,
+            UPI, Bitcoin and more.
         </p>
-
     </header>
 
-
-
-    <!-- QR GENERATOR -->
-
+    <!-- GENERATOR -->
     <div class="grid">
 
-
+        <!-- LEFT -->
         <div class="card">
 
             <h2>Create Your QR Code</h2>
 
-
+            <!-- QR TYPE -->
             <label for="qrtype">
-                QR Type
+                QR Code Type
             </label>
 
-            <select id="qrtype"></select>
+            <select id="qrtype">
+                <option value="text">📝 Plain Text</option>
+                <option value="url">🌐 Website / URL</option>
+                <option value="wifi">📶 Wi-Fi</option>
+                <option value="vcard">👤 Contact / vCard</option>
+                <option value="email">📧 Email</option>
+                <option value="sms">💬 SMS</option>
+                <option value="phone">📞 Phone</option>
+                <option value="gps">📍 GPS Location</option>
+                <option value="event">📅 Event</option>
+                <option value="whatsapp">🟢 WhatsApp</option>
+                <option value="upi">💳 UPI Payment</option>
+                <option value="bitcoin">₿ Bitcoin</option>
+                <option value="custom">⚙️ Custom QR Data</option>
+            </select>
 
-
+            <!-- DYNAMIC FIELDS -->
             <div id="qfields"></div>
 
-
+            <!-- LIVE LOCATION -->
             <button
+                type="button"
                 class="btn"
-                onclick="getLiveLocation()"
-            >
+                onclick="getLiveLocation()">
                 📍 Get Live Location
             </button>
 
-
+            <!-- COLORS -->
             <label for="fg">
                 Foreground
             </label>
@@ -101,9 +90,7 @@
             <input
                 id="fg"
                 type="color"
-                value="#000000"
-            >
-
+                value="#000000">
 
             <label for="bg">
                 Background
@@ -112,12 +99,12 @@
             <input
                 id="bg"
                 type="color"
-                value="#ffffff"
-            >
+                value="#ffffff">
 
-
+            <!-- SIZE -->
             <label for="size">
-                QR Code Size
+                QR Code Size:
+                <span id="sizeValue">320px</span>
             </label>
 
             <input
@@ -126,22 +113,20 @@
                 min="128"
                 max="900"
                 value="320"
-            >
+                oninput="document.getElementById('sizeValue').textContent=this.value+'px'">
 
+            <br><br>
 
             <button
+                type="button"
                 class="btn primary"
-                onclick="generateQR()"
-            >
+                onclick="generateQR()">
                 Generate QR Code
             </button>
 
         </div>
 
-
-
         <!-- PREVIEW -->
-
         <div class="card preview">
 
             <h2>QR Code Preview</h2>
@@ -151,21 +136,17 @@
             <br>
 
             <button
+                type="button"
                 class="btn primary"
-                onclick="downloadQR()"
-            >
+                onclick="downloadQR()">
                 Download QR Code PNG
             </button>
 
         </div>
 
-
     </div>
 
-
-
     <!-- SEO CONTENT -->
-
     <section class="card" style="margin-top:24px">
 
         <h2>Free Online QR Code Generator</h2>
@@ -180,57 +161,592 @@
             Generate QR codes for websites, plain text, Wi-Fi
             networks, contact information, email addresses,
             phone numbers, SMS messages, GPS locations,
-            WhatsApp, UPI payments, Bitcoin and other custom data.
+            WhatsApp, UPI payments, Bitcoin and custom data.
         </p>
 
         <p>
-            You can customize the QR code foreground and
-            background colors, choose the QR code size,
-            generate it instantly and download the result
+            Customize the foreground and background colors,
+            choose the QR code size and download your QR code
             as a PNG image.
         </p>
 
     </section>
 
-
-
-    <!-- ADVERTISEMENT -->
-
     <div class="ad">
         ADVERTISEMENT SPACE
     </div>
 
-
 </div>
-
-
-
-<!-- SCRIPTS -->
-
-<script src="js/common.js"></script>
-
-<script src="js/a.js"></script>
 
 
 <script>
 
-    Object.entries(qrTypes).forEach(
-        ([v, t]) =>
-            $("qrtype").add(
-                new Option(t, v)
-            )
+/* =========================
+   QR TYPE FIELDS
+========================= */
+
+const qrtype = document.getElementById("qrtype");
+const qfields = document.getElementById("qfields");
+const qrcodeBox = document.getElementById("qrcode");
+
+
+function field(label, id, placeholder = "", type = "text") {
+
+    return `
+        <label for="${id}">
+            ${label}
+        </label>
+
+        <input
+            type="${type}"
+            id="${id}"
+            placeholder="${placeholder}">
+    `;
+}
+
+
+function textarea(label, id, placeholder = "") {
+
+    return `
+        <label for="${id}">
+            ${label}
+        </label>
+
+        <textarea
+            id="${id}"
+            placeholder="${placeholder}"></textarea>
+    `;
+}
+
+
+/* =========================
+   RENDER FIELDS
+========================= */
+
+function renderQRFields() {
+
+    const type = qrtype.value;
+
+    qfields.innerHTML = "";
+
+    if (type === "text") {
+
+        qfields.innerHTML =
+            textarea(
+                "Text",
+                "text",
+                "Enter your text here..."
+            );
+
+    }
+
+    else if (type === "url") {
+
+        qfields.innerHTML =
+            field(
+                "Website URL",
+                "url",
+                "https://example.com",
+                "url"
+            );
+
+    }
+
+    else if (type === "wifi") {
+
+        qfields.innerHTML =
+            field(
+                "Wi-Fi Network Name (SSID)",
+                "ssid",
+                "My Wi-Fi"
+            ) +
+
+            field(
+                "Wi-Fi Password",
+                "password",
+                "Password",
+                "password"
+            ) +
+
+            `
+            <label for="encryption">
+                Security
+            </label>
+
+            <select id="encryption">
+                <option value="WPA">WPA/WPA2</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">No Password</option>
+            </select>
+
+            <label>
+                <input type="checkbox" id="hidden">
+                Hidden network
+            </label>
+            `;
+
+    }
+
+    else if (type === "vcard") {
+
+        qfields.innerHTML =
+            field("Full Name", "name", "John Doe") +
+            field("Phone Number", "vphone", "+919876543210") +
+            field("Email", "vemail", "john@example.com", "email") +
+            field("Organization", "org", "Company") +
+            field("Website", "vwebsite", "https://example.com", "url");
+
+    }
+
+    else if (type === "email") {
+
+        qfields.innerHTML =
+            field("Email Address", "email", "example@email.com", "email") +
+            field("Subject", "subject", "Email subject") +
+            textarea("Message", "message", "Your message...");
+
+    }
+
+    else if (type === "sms") {
+
+        qfields.innerHTML =
+            field("Phone Number", "smsphone", "+919876543210", "tel") +
+            textarea("Message", "smsmessage", "Your SMS message...");
+
+    }
+
+    else if (type === "phone") {
+
+        qfields.innerHTML =
+            field(
+                "Phone Number",
+                "phone",
+                "+919876543210",
+                "tel"
+            );
+
+    }
+
+    else if (type === "gps") {
+
+        qfields.innerHTML =
+            field("Latitude", "latitude", "28.6139", "number") +
+            field("Longitude", "longitude", "77.2090", "number");
+
+    }
+
+    else if (type === "event") {
+
+        qfields.innerHTML =
+            field("Event Title", "eventtitle", "My Event") +
+            field("Location", "eventlocation", "Event Location") +
+            field("Start Date", "startdate", "", "date") +
+            field("End Date", "enddate", "", "date") +
+            textarea("Description", "eventdescription", "Event details...");
+
+    }
+
+    else if (type === "whatsapp") {
+
+        qfields.innerHTML =
+            field(
+                "WhatsApp Number",
+                "whatsapp",
+                "919876543210",
+                "tel"
+            ) +
+
+            textarea(
+                "Message",
+                "whatsappmessage",
+                "Hello!"
+            );
+
+    }
+
+    else if (type === "upi") {
+
+        qfields.innerHTML =
+            field(
+                "UPI ID",
+                "upiid",
+                "example@upi"
+            ) +
+
+            field(
+                "Payee Name",
+                "upiname",
+                "Your Name"
+            ) +
+
+            field(
+                "Amount",
+                "upiamount",
+                "100",
+                "number"
+            ) +
+
+            field(
+                "Transaction Note",
+                "upinote",
+                "Payment"
+            );
+
+    }
+
+    else if (type === "bitcoin") {
+
+        qfields.innerHTML =
+            field(
+                "Bitcoin Address",
+                "btcaddress",
+                "bc1..."
+            ) +
+
+            field(
+                "Amount (BTC)",
+                "btcamount",
+                "0.001",
+                "number"
+            ) +
+
+            field(
+                "Message",
+                "btcmessage",
+                "Payment"
+            );
+
+    }
+
+    else if (type === "custom") {
+
+        qfields.innerHTML =
+            textarea(
+                "Custom QR Data",
+                "custom",
+                "Enter any data you want to encode..."
+            );
+
+    }
+}
+
+
+qrtype.addEventListener("change", renderQRFields);
+
+renderQRFields();
+
+
+/* =========================
+   HELPER
+========================= */
+
+function value(id) {
+
+    const element = document.getElementById(id);
+
+    return element ? element.value.trim() : "";
+}
+
+
+/* =========================
+   CREATE QR DATA
+========================= */
+
+function getQRData() {
+
+    const type = qrtype.value;
+
+    if (type === "text") {
+
+        return value("text");
+    }
+
+
+    if (type === "url") {
+
+        return value("url");
+    }
+
+
+    if (type === "wifi") {
+
+        const ssid = value("ssid");
+        const password = value("password");
+        const encryption = value("encryption");
+        const hidden =
+            document.getElementById("hidden")?.checked
+                ? "true"
+                : "false";
+
+        return `WIFI:T:${encryption};S:${ssid};P:${password};H:${hidden};;`;
+    }
+
+
+    if (type === "vcard") {
+
+        return `BEGIN:VCARD
+VERSION:3.0
+FN:${value("name")}
+ORG:${value("org")}
+TEL:${value("vphone")}
+EMAIL:${value("vemail")}
+URL:${value("vwebsite")}
+END:VCARD`;
+    }
+
+
+    if (type === "email") {
+
+        return `mailto:${value("email")}?subject=${encodeURIComponent(value("subject"))}&body=${encodeURIComponent(value("message"))}`;
+    }
+
+
+    if (type === "sms") {
+
+        return `SMSTO:${value("smsphone")}:${value("smsmessage")}`;
+    }
+
+
+    if (type === "phone") {
+
+        return `tel:${value("phone")}`;
+    }
+
+
+    if (type === "gps") {
+
+        return `geo:${value("latitude")},${value("longitude")}`;
+    }
+
+
+    if (type === "event") {
+
+        const start = value("startdate").replaceAll("-", "");
+        const end = value("enddate").replaceAll("-", "");
+
+        return `BEGIN:VEVENT
+SUMMARY:${value("eventtitle")}
+LOCATION:${value("eventlocation")}
+DTSTART:${start}
+DTEND:${end}
+DESCRIPTION:${value("eventdescription")}
+END:VEVENT`;
+    }
+
+
+    if (type === "whatsapp") {
+
+        const number = value("whatsapp")
+            .replace(/\+/g, "")
+            .replace(/\s/g, "");
+
+        return `https://wa.me/${number}?text=${encodeURIComponent(value("whatsappmessage"))}`;
+    }
+
+
+    if (type === "upi") {
+
+        let data =
+            `upi://pay?pa=${encodeURIComponent(value("upiid"))}` +
+            `&pn=${encodeURIComponent(value("upiname"))}`;
+
+        if (value("upiamount")) {
+            data += `&am=${encodeURIComponent(value("upiamount"))}`;
+        }
+
+        if (value("upinote")) {
+            data += `&tn=${encodeURIComponent(value("upinote"))}`;
+        }
+
+        data += "&cu=INR";
+
+        return data;
+    }
+
+
+    if (type === "bitcoin") {
+
+        let data =
+            `bitcoin:${value("btcaddress")}`;
+
+        if (value("btcamount")) {
+            data += `?amount=${encodeURIComponent(value("btcamount"))}`;
+        }
+
+        if (value("btcmessage")) {
+
+            data +=
+                `${value("btcamount") ? "&" : "?"}message=` +
+                encodeURIComponent(value("btcmessage"));
+        }
+
+        return data;
+    }
+
+
+    if (type === "custom") {
+
+        return value("custom");
+    }
+
+    return "";
+}
+
+
+/* =========================
+   GENERATE QR
+========================= */
+
+function generateQR() {
+
+    const data = getQRData();
+
+    if (!data) {
+
+        alert("Please enter the required information.");
+
+        return;
+    }
+
+    const size =
+        parseInt(
+            document.getElementById("size").value
+        );
+
+    const fg =
+        document.getElementById("fg").value;
+
+    const bg =
+        document.getElementById("bg").value;
+
+
+    qrcodeBox.innerHTML = "";
+
+
+    new QRCode(qrcodeBox, {
+
+        text: data,
+
+        width: size,
+
+        height: size,
+
+        colorDark: fg,
+
+        colorLight: bg,
+
+        correctLevel: QRCode.CorrectLevel.H
+
+    });
+}
+
+
+/* =========================
+   LIVE LOCATION
+========================= */
+
+function getLiveLocation() {
+
+    if (!navigator.geolocation) {
+
+        alert(
+            "Geolocation is not supported by your browser."
+        );
+
+        return;
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+
+            if (qrtype.value !== "gps") {
+
+                qrtype.value = "gps";
+
+                renderQRFields();
+            }
+
+
+            document.getElementById("latitude").value =
+                latitude.toFixed(6);
+
+            document.getElementById("longitude").value =
+                longitude.toFixed(6);
+
+        },
+
+        function(error) {
+
+            alert(
+                "Unable to get your location. Please allow location access."
+            );
+
+        }
+
     );
+}
 
 
-    $("qrtype").onchange =
-        renderQRFields;
+/* =========================
+   DOWNLOAD PNG
+========================= */
+
+function downloadQR() {
+
+    const canvas =
+        qrcodeBox.querySelector("canvas");
+
+    const image =
+        qrcodeBox.querySelector("img");
 
 
-    renderQRFields();
+    if (canvas) {
+
+        const link =
+            document.createElement("a");
+
+        link.download =
+            "qr-forge-studio.png";
+
+        link.href =
+            canvas.toDataURL("image/png");
+
+        link.click();
+
+        return;
+    }
+
+
+    if (image) {
+
+        const link =
+            document.createElement("a");
+
+        link.download =
+            "qr-forge-studio.png";
+
+        link.href =
+            image.src;
+
+        link.click();
+
+        return;
+    }
+
+
+    alert("Generate a QR code first.");
+}
 
 </script>
 
-
 </body>
-
 </html>
