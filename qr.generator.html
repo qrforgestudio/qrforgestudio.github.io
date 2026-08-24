@@ -1,1 +1,236 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>QR Generator — QR Forge Studio</title><link rel="stylesheet" href="style.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script></head><body><div class="container"><nav class="nav"><a href="index.html">🏠 Home</a><a href="resize.html">Resize</a><a href="c.html">Compress</a></nav><div class="grid"><div class="card"><h2>QR Generator</h2><label>QR Type</label><select id="qrtype"></select><div id="qfields"></div><button class="btn" onclick="getLiveLocation()">📍 Get Live Location</button><label>Foreground</label><input id="fg" type="color" value="#000000"><label>Background</label><input id="bg" type="color" value="#ffffff"><label>Size</label><input id="size" type="range" min="128" max="900" value="320"><button class="btn primary" onclick="generateQR()">Generate QR</button></div><div class="card preview"><div id="qrcode"></div><br><button class="btn primary" onclick="downloadQR()">Download PNG</button></div></div><div class="ad">ADVERTISEMENT SPACE</div></div><script src="js/common.js"></script><script src="js/a.js"></script><script>Object.entries(qrTypes).forEach(([v,t])=>$("qrtype").add(new Option(t,v)));$("qrtype").onchange=renderQRFields;renderQRFields();</script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Free QR Code Generator Online - QR Forge Studio</title>
+
+    <meta name="description"
+        content="Create free QR codes online with QR Forge Studio. Generate QR codes for URLs, text, Wi-Fi, vCards, email, SMS, phone, GPS, WhatsApp, UPI, Bitcoin and more. Customize colors and size, then download as PNG.">
+
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical"
+        href="https://qrforgestudio.github.io/qr.generator.html">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- NAVIGATION -->
+
+    <nav class="nav">
+
+        <a href="index.html">
+            🏠 Home
+        </a>
+
+        <a href="resize.html">
+            Resize
+        </a>
+
+        <a href="c.html">
+            Compress
+        </a>
+
+    </nav>
+
+
+
+    <!-- PAGE INTRO -->
+
+    <header>
+
+        <h1>Free QR Code Generator</h1>
+
+        <p class="muted">
+            Create free QR codes online for text, URLs, Wi-Fi,
+            contacts, email, SMS, phone numbers, locations,
+            WhatsApp, UPI, Bitcoin and more.
+        </p>
+
+    </header>
+
+
+
+    <!-- QR GENERATOR -->
+
+    <div class="grid">
+
+
+        <div class="card">
+
+            <h2>Create Your QR Code</h2>
+
+
+            <label for="qrtype">
+                QR Type
+            </label>
+
+            <select id="qrtype"></select>
+
+
+            <div id="qfields"></div>
+
+
+            <button
+                class="btn"
+                onclick="getLiveLocation()"
+            >
+                📍 Get Live Location
+            </button>
+
+
+            <label for="fg">
+                Foreground
+            </label>
+
+            <input
+                id="fg"
+                type="color"
+                value="#000000"
+            >
+
+
+            <label for="bg">
+                Background
+            </label>
+
+            <input
+                id="bg"
+                type="color"
+                value="#ffffff"
+            >
+
+
+            <label for="size">
+                QR Code Size
+            </label>
+
+            <input
+                id="size"
+                type="range"
+                min="128"
+                max="900"
+                value="320"
+            >
+
+
+            <button
+                class="btn primary"
+                onclick="generateQR()"
+            >
+                Generate QR Code
+            </button>
+
+        </div>
+
+
+
+        <!-- PREVIEW -->
+
+        <div class="card preview">
+
+            <h2>QR Code Preview</h2>
+
+            <div id="qrcode"></div>
+
+            <br>
+
+            <button
+                class="btn primary"
+                onclick="downloadQR()"
+            >
+                Download QR Code PNG
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- SEO CONTENT -->
+
+    <section class="card" style="margin-top:24px">
+
+        <h2>Free Online QR Code Generator</h2>
+
+        <p>
+            QR Forge Studio lets you create QR codes directly
+            in your browser for free. No account or installation
+            is required.
+        </p>
+
+        <p>
+            Generate QR codes for websites, plain text, Wi-Fi
+            networks, contact information, email addresses,
+            phone numbers, SMS messages, GPS locations,
+            WhatsApp, UPI payments, Bitcoin and other custom data.
+        </p>
+
+        <p>
+            You can customize the QR code foreground and
+            background colors, choose the QR code size,
+            generate it instantly and download the result
+            as a PNG image.
+        </p>
+
+    </section>
+
+
+
+    <!-- ADVERTISEMENT -->
+
+    <div class="ad">
+        ADVERTISEMENT SPACE
+    </div>
+
+
+</div>
+
+
+
+<!-- SCRIPTS -->
+
+<script src="js/common.js"></script>
+
+<script src="js/a.js"></script>
+
+
+<script>
+
+    Object.entries(qrTypes).forEach(
+        ([v, t]) =>
+            $("qrtype").add(
+                new Option(t, v)
+            )
+    );
+
+
+    $("qrtype").onchange =
+        renderQRFields;
+
+
+    renderQRFields();
+
+</script>
+
+
+</body>
+
+</html>
