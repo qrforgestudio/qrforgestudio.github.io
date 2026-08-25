@@ -1,1 +1,205 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Resize — QR Forge Studio</title><link rel="stylesheet" href="style.css"></head><body><div class="container"><nav class="nav"><a href="index.html">🏠 Home</a><a href="qr.generator.html">QR</a><a href="c.html">Compress</a></nav><div class="grid"><div class="card"><h2>Resize Image</h2><input id="file" type="file" accept="image/*"><label>Purpose</label><select id="purpose" onchange="applyPreset()"><option value="custom">Custom</option><option value="passport-india">India Passport Photo</option><option value="visa-2x2">Visa / ID 2×2</option><option value="instagram-square">Instagram Square</option><option value="instagram-portrait">Instagram Portrait</option><option value="youtube">YouTube Thumbnail</option><option value="linkedin">LinkedIn</option><option value="whatsapp">WhatsApp</option><option value="document">Document / A4</option></select><label>Width (px)</label><input id="w" type="number"><label>Height (px)</label><input id="h" type="number"><br><br><button class="btn primary" onclick="resizeNow()">Resize & Download</button></div><div class="card preview" id="preview">Choose an image</div></div><div class="ad">ADVERTISEMENT SPACE</div></div><script src="js/common.js"></script><script src="js/b.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta name="google-adsense-account" content="ca-pub-2332110455488458">
+<meta name="description" content="Free online image resizer. Resize images to custom dimensions, passport, visa, Instagram, YouTube, LinkedIn and WhatsApp sizes.">
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://qrforgestudio.github.io/resize.html">
+
+<title>Free Image Resizer - QR Forge Studio</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<nav class="nav">
+<a href="index.html">🏠 Home</a>
+<a href="qr.generator.html">QR Generator</a>
+<a href="a.html">Crop</a>
+</nav>
+
+<header>
+<h1>Image Resizer</h1>
+<p class="muted">
+Resize images to custom or popular dimensions.
+</p>
+</header>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>Resize Image</h2>
+
+<label for="file">Choose Image</label>
+<input id="file" type="file" accept="image/*">
+
+<label for="preset">Preset</label>
+
+<select id="preset">
+<option value="">Custom</option>
+<option value="413x531">Passport</option>
+<option value="413x531">Visa</option>
+<option value="1080x1080">Instagram</option>
+<option value="1280x720">YouTube</option>
+<option value="1200x627">LinkedIn</option>
+<option value="800x800">WhatsApp</option>
+</select>
+
+<label for="width">Width</label>
+<input id="width" type="number" value="800">
+
+<label for="height">Height</label>
+<input id="height" type="number" value="800">
+
+<label>
+<input id="ratio" type="checkbox" checked>
+ Keep aspect ratio
+</label>
+
+<br>
+
+<button class="btn primary" onclick="resizeImage()">
+Resize Image
+</button>
+
+</div>
+
+<div class="card preview">
+
+<h2>Preview</h2>
+
+<canvas id="canvas"></canvas>
+
+<br>
+
+<button class="btn primary" onclick="download()">
+Download PNG
+</button>
+
+</div>
+
+</div>
+
+<div class="ad">ADVERTISEMENT SPACE</div>
+
+</div>
+
+<script>
+
+let image = new Image();
+let ratio = 1;
+
+document.getElementById("file").addEventListener("change",function(){
+
+const file = this.files[0];
+
+if(!file) return;
+
+const reader = new FileReader();
+
+reader.onload = function(e){
+
+image.onload = function(){
+
+ratio = image.naturalWidth / image.naturalHeight;
+
+document.getElementById("width").value =
+image.naturalWidth;
+
+document.getElementById("height").value =
+image.naturalHeight;
+
+};
+
+image.src = e.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+document.getElementById("preset").addEventListener("change",function(){
+
+if(!this.value) return;
+
+const parts = this.value.split("x");
+
+document.getElementById("width").value = parts[0];
+document.getElementById("height").value = parts[1];
+
+});
+
+document.getElementById("width").addEventListener("input",function(){
+
+if(document.getElementById("ratio").checked && ratio){
+
+document.getElementById("height").value =
+Math.round(Number(this.value) / ratio);
+
+}
+
+});
+
+function resizeImage(){
+
+if(!image.src){
+
+alert("Please choose an image first.");
+return;
+
+}
+
+const w = Number(document.getElementById("width").value);
+const h = Number(document.getElementById("height").value);
+
+if(w <= 0 || h <= 0){
+
+alert("Enter valid dimensions.");
+return;
+
+}
+
+const canvas = document.getElementById("canvas");
+
+canvas.width = w;
+canvas.height = h;
+
+canvas.getContext("2d").drawImage(
+image,0,0,w,h
+);
+
+}
+
+function download(){
+
+const canvas = document.getElementById("canvas");
+
+if(!canvas.width){
+
+alert("Resize an image first.");
+return;
+
+}
+
+const link = document.createElement("a");
+
+link.download = "resized-image.png";
+link.href = canvas.toDataURL("image/png");
+
+link.click();
+
+}
+
+</script>
+
+</body>
+</html>
