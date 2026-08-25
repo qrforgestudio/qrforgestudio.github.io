@@ -1,1 +1,228 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Image Editor — QR Forge Studio</title><link rel="stylesheet" href="style.css"></head><body><div class="container"><nav class="nav"><a href="index.html">🏠 Home</a><a href="resize.html">Resize</a></nav><div class="grid"><div class="card"><h2>Image Editor</h2><input id="file" type="file" accept="image/*"><label>Rotate</label><select id="rotate"><option value="0">0°</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select><label>Flip</label><select id="flip"><option value="none">None</option><option value="h">Horizontal</option><option value="v">Vertical</option></select><br><br><button class="btn primary" onclick="editNow()">Apply & Download</button></div><div class="card preview" id="preview">Choose an image</div></div></div><script src="js/common.js"></script><script src="js/f.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta name="google-adsense-account" content="ca-pub-2332110455488458">
+<meta name="description" content="Free browser-based image editor. Rotate and flip images and download the edited result.">
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://qrforgestudio.github.io/d.html">
+
+<title>Free Image Editor - QR Forge Studio</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<nav class="nav">
+<a href="index.html">🏠 Home</a>
+<a href="resize.html">Resize</a>
+<a href="a.html">Crop</a>
+</nav>
+
+<header>
+<h1>Image Editor</h1>
+<p class="muted">
+Rotate and flip images directly in your browser.
+</p>
+</header>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>Edit Image</h2>
+
+<label for="file">Choose Image</label>
+<input id="file" type="file" accept="image/*">
+
+<br><br>
+
+<div class="row">
+
+<button class="btn" onclick="rotateLeft()">
+↶ Rotate Left
+</button>
+
+<button class="btn" onclick="rotateRight()">
+↷ Rotate Right
+</button>
+
+</div>
+
+<br>
+
+<div class="row">
+
+<button class="btn" onclick="flipHorizontal()">
+↔ Flip Horizontal
+</button>
+
+<button class="btn" onclick="flipVertical()">
+↕ Flip Vertical
+</button>
+
+</div>
+
+<br>
+
+<button class="btn" onclick="resetImage()">
+Reset
+</button>
+
+</div>
+
+<div class="card preview">
+
+<h2>Preview</h2>
+
+<canvas id="canvas"></canvas>
+
+<br>
+
+<button class="btn primary" onclick="download()">
+Download PNG
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let image = new Image();
+
+let rotation = 0;
+let flipX = 1;
+let flipY = 1;
+
+document.getElementById("file").addEventListener("change",function(){
+
+const file = this.files[0];
+
+if(!file) return;
+
+const reader = new FileReader();
+
+reader.onload = e => {
+
+image.onload = draw;
+image.src = e.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+function draw(){
+
+if(!image.naturalWidth)
+return;
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const swapped =
+Math.abs(rotation) % 180 !== 0;
+
+canvas.width =
+swapped ? image.naturalHeight : image.naturalWidth;
+
+canvas.height =
+swapped ? image.naturalWidth : image.naturalHeight;
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.save();
+
+ctx.translate(
+canvas.width / 2,
+canvas.height / 2
+);
+
+ctx.rotate(
+rotation * Math.PI / 180
+);
+
+ctx.scale(flipX,flipY);
+
+ctx.drawImage(
+image,
+-image.naturalWidth / 2,
+-image.naturalHeight / 2
+);
+
+ctx.restore();
+
+}
+
+function rotateLeft(){
+
+rotation -= 90;
+draw();
+
+}
+
+function rotateRight(){
+
+rotation += 90;
+draw();
+
+}
+
+function flipHorizontal(){
+
+flipX *= -1;
+draw();
+
+}
+
+function flipVertical(){
+
+flipY *= -1;
+draw();
+
+}
+
+function resetImage(){
+
+rotation = 0;
+flipX = 1;
+flipY = 1;
+
+draw();
+
+}
+
+function download(){
+
+const canvas = document.getElementById("canvas");
+
+if(!canvas.width){
+
+alert("Please choose an image first.");
+return;
+
+}
+
+const link = document.createElement("a");
+
+link.download = "edited-image.png";
+link.href = canvas.toDataURL("image/png");
+
+link.click();
+
+}
+
+</script>
+
+</body>
+</html>
